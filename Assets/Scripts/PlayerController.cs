@@ -4,21 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum Color { BLUE, GREEN, ORANGE, PINK, YELLOW };
     public float jumpForce = 200.0f;
 
     private Rigidbody2D playerRigidbody;
+    private Animator animator;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.isDead)
+        if (GameManager.instance.IsDead)
         {
+            animator.speed = 0.0f;
             playerRigidbody.velocity = Vector2.zero;
             playerRigidbody.gravityScale = 0;
             return;
@@ -43,7 +52,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.collider.tag == "Dead")
         {
-            GameManager.instance.isDead = true;
+            GameManager.instance.IsDead = true;
+            GameManager.instance.Die();
         }
     }
 
@@ -51,8 +61,13 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Score")
         {
-            GameManager.instance.addScore();
-            GameManager.instance.addSpeed();
+            GameManager.instance.AddScore();
+            GameManager.instance.AddSpeed();
         }
+    }
+
+    public void SetColor(Color color)
+    {
+        animator.SetInteger("color", (int)color);
     }
 }

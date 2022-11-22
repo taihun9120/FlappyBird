@@ -5,25 +5,28 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public PlayerController.Color color;
     public static GameManager instance;
 
-    public GameObject dieFlash;
-    public TextMeshProUGUI scoreText;
-    public GameObject gameOverUI;
+    public bool GameStart { get; set; } = false;
+    public bool IsDead { get; set; } = false;
+    private int Score { get; set; } = 0;
+    [field: SerializeField]
+    public float Speed { get; private set; } = 2f;
 
-    public bool isDead { get; set; } = false;
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private PlayerController playerController;
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
+    [SerializeField]
+    private GameObject dieFlash;
+    [SerializeField]
+    private GameObject gameOverUI;
+    [SerializeField]
+    private GameObject pannel;
 
-    private int _score;
-    public int score
-    {
-        get { return _score; }
-    }
-    private float _speed = 2f;
-
-    public float speed
-    {
-        get { return _speed; }
-    }
     // Start is called before the first frame update
     void Awake()
     {
@@ -41,17 +44,29 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDead)
+        if (IsDead)
         {
-            dieFlash.SetActive(true);
-            gameOverUI.SetActive(true);
             return;
         }
 
-        scoreText.text = "score : " + score;
+        scoreText.text = "score : " + Score;
     }
 
-    public void addScore() { _score++; }
+    public void AddScore() { Score++; }
 
-    public void addSpeed() { _speed *= 1.01f; }
+    public void AddSpeed() { Speed *= 1.01f; }
+
+    public void Die()
+    {
+        dieFlash.SetActive(true);
+        gameOverUI.SetActive(true);
+    }
+
+    public void CharacterSelect(PlayerController.Color color)
+    {
+        player.SetActive(true);
+        playerController.SetColor(color);
+        pannel.SetActive(false);
+        GameStart = true;
+    }
 }

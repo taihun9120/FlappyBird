@@ -13,9 +13,9 @@ public class ScrollingObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.instance.isDead)
+        if (!GameManager.instance.IsDead && GameManager.instance.GameStart)
         {
-            transform.Translate(Vector3.left * GameManager.instance.speed * Time.deltaTime);
+            transform.Translate(Vector3.left * GameManager.instance.Speed * Time.deltaTime);
         }
     }
 }
